@@ -1,3 +1,5 @@
+$ConfirmPreference = 'None'
+
 # Configure 
 Set-NetConnectionProfile -NetworkCategory Private
 winrm quickconfig -quiet
