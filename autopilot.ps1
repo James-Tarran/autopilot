@@ -72,7 +72,8 @@ if ($bad) {
 }
 
 $computers += $c
-Write-Host "Gathered details for device; please allow 60 minutes for processing, then restart your device.`nIf you are still not prompted to sign in with your corporate account after 60 minutes, please contact technicalsupport@techary.com"
+Write-Host -ForegroundColor Green "Device detail gathering complete!"
+write-host "`nPlease allow 60 minutes for processing, then restart your device.`nIf you are still not prompted to sign in with your corporate account after 60 minutes, please contact technicalsupport@techary.com.`n We will now spin for 60 minutes:"
 countdown 3600
 Write-host "Please now restart your computer"
 $computers
