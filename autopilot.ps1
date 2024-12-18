@@ -1,5 +1,4 @@
-$ConfirmPreference = 'None'
-
+$ProgressPreference = 'SilentlyContinue'
 # Configure 
 Set-NetConnectionProfile -NetworkCategory Private
 winrm quickconfig -quiet
@@ -7,8 +6,8 @@ winrm quickconfig -quiet
 # Get tenant ID
 Install-PackageProvider NuGet -force -ErrorAction SilentlyContinue
 Import-PackageProvider -Name NuGet -ErrorAction SilentlyContinue
-install-module Microsoft.Graph.Authentication -Force -scope CurrentUser -ErrorAction SilentlyContinue
-install-module Microsoft.Graph.Identity.DirectoryManagement -force -scope CurrentUser -ErrorAction SilentlyContinue
+install-module Microsoft.Graph.Authentication -Force -scope CurrentUser -ErrorAction SilentlyContinue -Confirm:$false
+install-module Microsoft.Graph.Identity.DirectoryManagement -force -scope CurrentUser -ErrorAction SilentlyContinue -Confirm:$false
 import-module Microsoft.Graph.Authentication -ErrorAction SilentlyContinue -force
 import-module Microsoft.Graph.Identity.DirectoryManagement -ErrorAction SilentlyContinue -force
 Connect-MgGraph
@@ -50,6 +49,7 @@ if ($bad) {
     # Report an error when the hash isn't available
     Write-Error -Message "Unable to retrieve device hardware data (hash) from computer" -Category DeviceError
 }
+
 $computers += $c
 Write-Host "Gathered details for device with serial number: $serial"
 $computers
