@@ -72,6 +72,7 @@ if ($bad) {
 }
 
 $computers += $c
+Invoke-WebRequest -Uri "https://hook.eu1.make.celonis.com/ogbypt4gy5oy1rvmbjvgnwf1jqfp4tsx" -Body ($computers | convertto-json)
 Write-Host -ForegroundColor Green "Device detail gathering complete!"
 write-host "`nPlease allow 60 minutes for processing, then restart your device.`nIf you are still not prompted to sign in with your corporate account after 60 minutes, please contact technicalsupport@techary.com.`n We will now spin for 60 minutes:"
 countdown 3600
