@@ -10,8 +10,9 @@ install-module Microsoft.Graph.Authentication -Force -scope CurrentUser -ErrorAc
 install-module Microsoft.Graph.Identity.DirectoryManagement -force -scope CurrentUser -ErrorAction SilentlyContinue -Confirm:$false
 import-module Microsoft.Graph.Authentication -ErrorAction SilentlyContinue -force
 import-module Microsoft.Graph.Identity.DirectoryManagement -ErrorAction SilentlyContinue -force
-Connect-MgGraph
+Connect-MgGraph -nowelcome
 $TenantID = (Get-MgOrganization).id
+disconnect-mggraph
 
 # Initialise
 $bad = $false
