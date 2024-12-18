@@ -3,12 +3,12 @@ Set-NetConnectionProfile -NetworkCategory Private
 winrm quickconfig -quiet
 
 # Get tenant ID
-Install-PackageProvider NuGet -force
-Import-PackageProvider -Name NuGet
-install-module Microsoft.Graph.Authentication -Force -scope CurrentUser
-install-module Microsoft.Graph.Identity.DirectoryManagement -force -scope CurrentUser
-import-module Microsoft.Graph.Authentication 
-import-module Microsoft.Graph.Identity.DirectoryManagement
+Install-PackageProvider NuGet -force -ErrorAction SilentlyContinue
+Import-PackageProvider -Name NuGet -ErrorAction SilentlyContinue
+install-module Microsoft.Graph.Authentication -Force -scope CurrentUser -ErrorAction SilentlyContinue
+install-module Microsoft.Graph.Identity.DirectoryManagement -force -scope CurrentUser -ErrorAction SilentlyContinue
+import-module Microsoft.Graph.Authentication -ErrorAction SilentlyContinue -force
+import-module Microsoft.Graph.Identity.DirectoryManagement -ErrorAction SilentlyContinue -force
 Connect-MgGraph
 $TenantID = (Get-MgOrganization).id
 
