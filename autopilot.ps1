@@ -4,6 +4,7 @@ winrm quickconfig -quiet
 
 # Get tenant ID
 Install-PackageProvider NuGet -force
+Import-PackageProvider -Name NuGet
 install-module Microsoft.Graph.Authentication -Force -scope CurrentUser
 install-module Microsoft.Graph.Identity.DirectoryManagement -force -scope CurrentUser
 import-module Microsoft.Graph.Authentication 
