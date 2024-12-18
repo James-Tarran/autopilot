@@ -11,13 +11,15 @@ import-module Microsoft.Graph.Identity.DirectoryManagement
 Connect-MgGraph
 $TenantID = (Get-MgOrganization).id
 
+# Initialise
 $bad = $false
+$computers = @()
 
 # Get a CIM session
 $session = New-CimSession
 
 # Get the common properties.
-Write-Verbose "Checking $comp"
+Write-Verbose "Checking serial number"
 $serial = (Get-CimInstance -CimSession $session -Class Win32_BIOS).SerialNumber
 
 # Get the hash (if available)
@@ -29,59 +31,23 @@ if ($devDetail -and (-not $Force)){
     $hash = ""
 }
 
-# If the hash isn't available, get the make and model
-if ($bad -or $Force) {
-    $cs = Get-CimInstance -CimSession $session -Class Win32_ComputerSystem
-    $make = $cs.Manufacturer.Trim()
-    $model = $cs.Model.Trim()
-    if ($Partner) {
-        $bad = $false
-    }
-} else {
-    $make = ""
-    $model = ""
-}
-
 # Getting the PKID is generally problematic for anyone other than OEMs, so let's skip it here
 $product = ""
 
-# Depending on the format requested, create the necessary object
-if ($Partner) {
-    # Create a pipeline object
-    $c = New-Object psobject -Property @{
-        "Device Serial Number" = $serial
-        "Windows Product ID" = $product
-        "Hardware Hash" = $hash
-        "Manufacturer name" = $make
-        "Device model" = $model
-        "Tenant ID" = $TenantID
-    }
-} else {
-    # Create a pipeline object
-    $c = New-Object psobject -Property @{
-        "Device Serial Number" = $serial
-        "Windows Product ID" = $product
-        "Hardware Hash" = $hash
-    }
-    
-    if ($GroupTag -ne "") {
-        Add-Member -InputObject $c -NotePropertyName "Group Tag" -NotePropertyValue $GroupTag
-    }
-    if ($AssignedUser -ne "") {
-        Add-Member -InputObject $c -NotePropertyName "Assigned User" -NotePropertyValue $AssignedUser
-    }
+# Create a pipeline object
+$c = New-Object psobject -Property @{
+    "Device Serial Number" = $serial
+    "Windows Product ID" = $product
+    "Hardware Hash" = $hash
+    "tenant ID" = $TenantID
 }
 
 # Write the object to the pipeline or array
 if ($bad) {
     # Report an error when the hash isn't available
-    Write-Error -Message "Unable to retrieve device hardware data (hash) from computer $comp" -Category DeviceError
+    Write-Error -Message "Unable to retrieve device hardware data (hash) from computer" -Category DeviceError
 }
-elseif ($OutputFile -eq "") {
-    $c
-} else {
-    $computers += $c
-    Write-Host "Gathered details for device with serial number: $serial"
-}
+$computers += $c
+Write-Host "Gathered details for device with serial number: $serial"
 
 Remove-CimSession $session
