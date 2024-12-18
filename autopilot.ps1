@@ -49,5 +49,6 @@ if ($bad) {
 }
 $computers += $c
 Write-Host "Gathered details for device with serial number: $serial"
+$computers
 
 Remove-CimSession $session
